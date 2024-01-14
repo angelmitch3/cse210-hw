@@ -5,8 +5,10 @@ class Program
     static void Main(string[] args)
     {
        Console.Write("Enter your grade percentage: ");
-        double grade = Convert.ToDouble(Console.ReadLine());
-        string letter;
+        string answer = Console.ReadLine();
+        int grade = int.Parse(answer);
+
+        string letter = "";
 
         if (grade >= 90)
         {
