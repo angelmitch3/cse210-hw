@@ -1,5 +1,5 @@
 using System;
-using System.Text.Json;
+using System.Collections.Generic;
 using System.IO;
 
 public class JournalEntry
@@ -22,6 +22,7 @@ public class JournalEntry
         return $"Date: {Date}\nPrompt: {Prompt}\nResponse: {Response}\n";
     }
 }
+
 
 public class Journal
 {
@@ -48,7 +49,6 @@ public class Journal
         string response = Console.ReadLine();
         AddEntry(new JournalEntry(prompts[index], response));
     }
-
     public void DisplayJournal()
     {
         foreach (var entry in entries)
@@ -57,60 +57,32 @@ public class Journal
         }
     }
 
-    public string SaveJournal(string filename)
+    public void SaveJournal(string filename)
+{
+    using (StreamWriter sw = new StreamWriter(filename))
     {
-        try
+        foreach (var entry in entries)
         {
-            using (StreamWriter sw = new StreamWriter(filename))
-            {
-                foreach (var entry in entries)
-                {
-                    var json = JsonSerializer.Serialize(entry);
-                    sw.WriteLine(json);
-                }
-            }
-            return "Journal saved successfully.";
-        }
-        catch (Exception ex)
-        {
-            return $"Failed to write to file: {filename}. Error: {ex.Message}";
-        }
-    }
-
-    public string LoadJournal(string filename)
-    {
-        if (!File.Exists(filename))
-        {
-            return $"File not found: {filename}";
-        }
-
-        entries.Clear();
-        try
-        {
-            using (StreamReader sr = new StreamReader(filename))
-            {
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    try
-                    {
-                        var entry = JsonSerializer.Deserialize<JournalEntry>(line);
-                        entries.Add(entry);
-                    }
-                    catch (JsonException ex)
-                    {
-                        return $"Failed to deserialize line: {line}. Error: {ex.Message}";
-                    }
-                }
-            }
-            return "Journal loaded successfully.";
-        }
-        catch (Exception ex)
-        {
-            return $"Failed to read from file: {filename}. Error: {ex.Message}";
+            var json = JsonSerializer.Serialize(entry);
+            sw.WriteLine(json);
         }
     }
 }
+
+public void LoadJournal(string filename)
+{
+    entries.Clear();
+    using (StreamReader sr = new StreamReader(filename))
+    {
+        string line;
+        while ((line = sr.ReadLine()) != null)
+        {
+            var entry = JsonSerializer.Deserialize<JournalEntry>(line);
+            entries.Add(entry);
+        }
+    }
+}
+
 
 public class Program
 {
@@ -133,14 +105,12 @@ public class Program
                 case "3":
                     Console.WriteLine("Enter a filename:");
                     string saveFilename = Console.ReadLine();
-                    string saveResult = journal.SaveJournal(saveFilename);
-                    Console.WriteLine(saveResult);
+                    journal.SaveJournal(saveFilename);
                     break;
                 case "4":
                     Console.WriteLine("Enter a filename:");
                     string loadFilename = Console.ReadLine();
-                    string loadResult = journal.LoadJournal(loadFilename);
-                    Console.WriteLine(loadResult);
+                    journal.LoadJournal(loadFilename);
                     break;
                 case "5":
                     running = false;
@@ -148,4 +118,5 @@ public class Program
             }
         }
     }
+}
 }
