@@ -122,8 +122,7 @@ public class Program
         {
             Console.WriteLine("\nPlease select one of the following choices:\n"); 
             Console.WriteLine("1. Write a new entry\n2. Display the journal\n3. Save the journal to a file\n4. Load the journal from a file\n5. Exit");
-            Console.Write("What would you like to do? ");
-            Console.WriteLine("");
+            Console.Write("What would you like to do? \n");
             string choice = Console.ReadLine();
             switch (choice)
             {
