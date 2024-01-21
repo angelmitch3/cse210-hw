@@ -103,7 +103,7 @@ public class Journal
                     }
                 }
             }
-            return "Journal loaded successfully.";
+            return "Journal loaded successfully. Please select Option 2 to display the loaded journal entry";
         }
         catch (Exception ex)
         {
@@ -120,7 +120,9 @@ public class Program
         bool running = true;
         while (running)
         {
+            Console.WriteLine("Please select one of the following choices:");
             Console.WriteLine("1. Write a new entry\n2. Display the journal\n3. Save the journal to a file\n4. Load the journal from a file\n5. Exit");
+            Console.Write("What would you like to do: ");
             string choice = Console.ReadLine();
             switch (choice)
             {
