@@ -1,4 +1,4 @@
-//Added features to add a new verse, select a scripture verse, pick a random verse and to practice
+//Added features to add a new verse, select a scripture verse, pick a random verse and to practice memorization
 
 using System;
 using System.Collections.Generic;
