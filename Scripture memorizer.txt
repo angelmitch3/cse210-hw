@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Program
+{
+    public static void Main()
+    {
+        Scripture scripture = new Scripture(new Reference("John", 3, 16), "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.");
+        scripture.Display();
+
+        while (true)
+        {
+            Console.WriteLine("\nPress enter to hide a word or type 'quit' to exit.");
+            string input = Console.ReadLine();
+
+            if (input.ToLower() == "quit")
+            {
+                break;
+            }
+
+            scripture.HideRandomWord();
+            Console.Clear();
+            scripture.Display();
+        }
+    }
+}
+
+public class Scripture
+{
+    public Reference Reference { get; set; }
+    public List<Word> Words { get; set; }
+
+    public Scripture(Reference reference, string text)
+    {
+        Reference = reference;
+        Words = text.Split(' ').Select(word => new Word(word)).ToList();
+    }
+
+    public void Display()
+    {
+        Console.WriteLine(Reference);
+        Console.WriteLine(string.Join(" ", Words));
+    }
+
+    public void HideRandomWord()
+    {
+        Random random = new Random();
+        int index = random.Next(Words.Count);
+        Words[index].Hide();
+    }
+}
+
+public class Reference
+{
+    public string Book { get; set; }
+    public int Chapter { get; set; }
+    public int VerseStart { get; set; }
+    public int? VerseEnd { get; set; }
+
+    public Reference(string book, int chapter, int verseStart, int? verseEnd = null)
+    {
+        Book = book;
+        Chapter = chapter;
+        VerseStart = verseStart;
+        VerseEnd = verseEnd;
+    }
+
+    public override string ToString()
+    {
+        return VerseEnd.HasValue ? $"{Book} {Chapter}:{VerseStart}-{VerseEnd}" : $"{Book} {Chapter}:{VerseStart}";
+    }
+}
+
+public class Word
+{
+    private string text;
+    public bool IsHidden { get; private set; }
+
+    public Word(string text)
+    {
+        this.text = text;
+        IsHidden = false;
+    }
+
+    public void Hide()
+    {
+        IsHidden = true;
+    }
+
+    public override string ToString()
+    {
+        return IsHidden ? "_____" : text;
+    }
+}
