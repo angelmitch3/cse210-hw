@@ -57,9 +57,9 @@ class BreathingActivity : Activity
     public override void Start()
     {
         Console.WriteLine("\nWelcome to the Breathing Activity.\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.\n");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
-        Thread.Sleep(5000); // Pause for 5 seconds
-        LoadingAnimation(5); // Loading animation
+        Console.WriteLine($"\nThe activity will last for {duration} seconds. Prepare to begin.\n");
+        Thread.Sleep(1000); // Pause for 5 seconds
+        LoadingAnimation(6); // Loading animation
 
         DateTime startTime = DateTime.Now;
         while ((DateTime.Now - startTime).TotalSeconds < duration)
@@ -83,7 +83,7 @@ class ReflectionActivity : Activity
         Console.WriteLine("\nWelcome to the Reflection Activity.\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.\n");
         Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
-        LoadingAnimation(5); // Loading animation
+        LoadingAnimation(6); // Loading animation
 
         string[] prompts = new string[]
         {
@@ -119,7 +119,7 @@ class ReflectionActivity : Activity
             Console.WriteLine("Please wait for next question...");
             //Console.ReadLine();
             //Thread.Sleep(5000); // Pause for 5 seconds
-            LoadingAnimation(5); // Loading animation
+            LoadingAnimation(6); // Loading animation
         }
         End("Reflection Activity");
     }
@@ -136,7 +136,7 @@ class ListingActivity : Activity
         Console.WriteLine("\nWelcome to the Listing Activity.\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.\n");
         Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
-        LoadingAnimation(5); // Loading animation
+        LoadingAnimation(6); // Loading animation
 
         string[] prompts = new string[]
         {
@@ -180,7 +180,7 @@ class GratitudeActivity : Activity
         Console.WriteLine("\nWelcome to the Gratitude Activity.\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.\n");
         Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
-        LoadingAnimation(5); // Loading animation
+        LoadingAnimation(6); // Loading animation
 
         List<string> items = new List<string>();
         DateTime startTime = DateTime.Now;
@@ -192,7 +192,7 @@ class GratitudeActivity : Activity
             Console.ReadLine();
             Console.WriteLine("Please wait for next question...");
             Thread.Sleep(1000); // Pause for 5 seconds
-            LoadingAnimation(5); // Loading animation
+            LoadingAnimation(6); // Loading animation
         }
 
         Console.WriteLine($"You have listed {items.Count} items.");
