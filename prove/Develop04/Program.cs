@@ -2,75 +2,89 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 
-class Program
+abstract class Activity
 {
-    static void Main(string[] args)
+    protected int duration;
+
+    public Activity(int duration)
     {
-        while (true)
-        {
-            Console.WriteLine("\nChoose an activity:\n1. Breathing Activity\n2. Reflection Activity\n3. Listing Activity\n4. Gratitude Activity\n5. Exit\nPlease enter your choice below:");
-            int choice = Convert.ToInt32(Console.ReadLine());
-
-            if (choice == 5)
-                break;
-
-            Console.WriteLine("Enter the duration of the activity in seconds:");
-            int duration = Convert.ToInt32(Console.ReadLine());
-
-            switch (choice)
-            {
-                case 1:
-                    Console.WriteLine("Enter the countdown number for each breath:");
-                    int countdownNumber = Convert.ToInt32(Console.ReadLine());
-                    StartActivity("Breathing Activity", "\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.", duration);
-                    BreathingActivity(duration, countdownNumber);
-                    break;
-                case 2:
-                    StartActivity("Reflection Activity", "\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.", duration);
-                    ReflectionActivity(duration);
-                    break;
-                case 3:
-                    StartActivity("Listing Activity", "\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.", duration);
-                    ListingActivity(duration);
-                    break;
-                case 4:
-                    StartActivity("Gratitude Activity", "\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.", duration);
-                    GratitudeActivity(duration);
-                    break;
-            }
-        }
+        this.duration = duration;
     }
 
-    static void StartActivity(string name, string description, int duration)
-    {
-        Console.WriteLine($"\nWelcome to the {name}.\n{description}\n");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
-        Thread.Sleep(5000); // Pause for 5 seconds
-        LoadingAnimation(5); // Loading animation
-    }
+    public abstract void Start();
 
-    static void EndActivity(string name, int duration)
+    protected void End(string name)
     {
         Console.WriteLine($"Good job! You have completed the {name}. It lasted for {duration} seconds.");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(5); // Loading animation
     }
 
-    static void BreathingActivity(int duration, int countdownNumber)
+    protected void Countdown(int countdownNumber)
     {
+        for (int i = countdownNumber; i > 0; i--)
+        {
+            Console.Write(i);
+            Thread.Sleep(1000); // Pause for 1 second
+            Console.Write("\b \b");
+        }
+        Console.WriteLine();
+    }
+
+    protected void LoadingAnimation(int seconds)
+    {
+        List<string> animationStrings = new List<string>() { "|", "/", "-", "\\", "|", "/", "-", "\\", "|","/", "-", "\\", "|"};
+        for (int i = 0; i < seconds; i++)
+        {
+            Console.Write(animationStrings[i % animationStrings.Count]);
+            Thread.Sleep(500); // Pause for 1 second
+            Console.Write("\b \b");
+        }
+    }
+}
+
+class BreathingActivity : Activity
+{
+    private int breathInCountdown;
+    private int breathOutCountdown;
+
+    public BreathingActivity(int duration, int breathInCountdown, int breathOutCountdown) : base(duration)
+    {
+        this.breathInCountdown = breathInCountdown;
+        this.breathOutCountdown = breathOutCountdown;
+    }
+
+    public override void Start()
+    {
+        Console.WriteLine("\nWelcome to the Breathing Activity.\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.\n");
+        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
+        Thread.Sleep(5000); // Pause for 5 seconds
+        LoadingAnimation(5); // Loading animation
+
         DateTime startTime = DateTime.Now;
         while ((DateTime.Now - startTime).TotalSeconds < duration)
         {
             Console.WriteLine("Breathe in...");
-            Countdown(countdownNumber);
+            Countdown(breathInCountdown);
             Console.WriteLine("Breathe out...");
-            Countdown(countdownNumber);
+            Countdown(breathOutCountdown);
         }
-        EndActivity("Breathing Activity", duration);
+        End("Breathing Activity");
+    }
+}
+class ReflectionActivity : Activity
+{
+    public ReflectionActivity(int duration) : base(duration)
+    {
     }
 
-    static void ReflectionActivity(int duration)
+    public override void Start()
     {
+        Console.WriteLine("\nWelcome to the Reflection Activity.\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.\n");
+        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
+        Thread.Sleep(5000); // Pause for 5 seconds
+        LoadingAnimation(5); // Loading animation
+
         string[] prompts = new string[]
         {
             "Think of a time when you stood up for someone else.",
@@ -101,17 +115,29 @@ class Program
         {
             string question = questions[random.Next(questions.Length)];
             Console.WriteLine(question);
-            Thread.Sleep(5000); // Pause for 5 seconds
-            LoadingAnimation(5); // Loading animation
-            Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
+            Console.WriteLine("Please wait for next question...");
+            //Console.ReadLine();
+            //Thread.Sleep(5000); // Pause for 5 seconds
+            LoadingAnimation(5); // Loading animation
         }
+        End("Reflection Activity");
+    }
+}
 
-        EndActivity("Reflection Activity", duration);
+class ListingActivity : Activity
+{
+    public ListingActivity(int duration) : base(duration)
+    {
     }
 
-    static void ListingActivity(int duration)
+    public override void Start()
     {
+        Console.WriteLine("\nWelcome to the Listing Activity.\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.\n");
+        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
+        Thread.Sleep(5000); // Pause for 5 seconds
+        LoadingAnimation(5); // Loading animation
+
         string[] prompts = new string[]
         {
             "Who are people that you appreciate?",
@@ -132,17 +158,29 @@ class Program
             Console.WriteLine("Enter an item:");
             string item = Console.ReadLine();
             items.Add(item);
-            Thread.Sleep(5000); // Pause for 5 seconds
+            Console.ReadLine();
+            Console.WriteLine("Please wait for next question...");
+            Thread.Sleep(1000); // Pause for 1 seconds
             LoadingAnimation(5); // Loading animation
         }
 
         Console.WriteLine($"You have listed {items.Count} items.");
-        EndActivity("Listing Activity", duration);
+        End("Listing Activity");
+    }
+}
+
+class GratitudeActivity : Activity
+{
+    public GratitudeActivity(int duration) : base(duration)
+    {
     }
 
-    static void GratitudeActivity(int duration)
+    public override void Start()
     {
-        Console.WriteLine("List the things you are grateful for:");
+        Console.WriteLine("\nWelcome to the Gratitude Activity.\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.\n");
+        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
+        Thread.Sleep(5000); // Pause for 5 seconds
+        LoadingAnimation(5); // Loading animation
 
         List<string> items = new List<string>();
         DateTime startTime = DateTime.Now;
@@ -151,35 +189,55 @@ class Program
             Console.WriteLine("Enter an item:");
             string item = Console.ReadLine();
             items.Add(item);
-            Thread.Sleep(5000); // Pause for 5 seconds
-            LoadingAnimation(5); // Loading animation
-            Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
+            Console.WriteLine("Please wait for next question...");
+            Thread.Sleep(1000); // Pause for 5 seconds
+            LoadingAnimation(5); // Loading animation
         }
 
         Console.WriteLine($"You have listed {items.Count} items.");
-        EndActivity("Gratitude Activity", duration);
+        End("Gratitude Activity");
     }
+}
 
-    static void Countdown(int countdownNumber)
+class Program
+{
+    static void Main(string[] args)
     {
-        for (int i = countdownNumber; i > 0; i--)
+        while (true)
         {
-            Console.Write(i);
-            Thread.Sleep(1000); // Pause for 1 second
-            LoadingAnimation(1); // Loading animation
-        }
-        Console.WriteLine();
-    }
+            Console.WriteLine("\nChoose an activity:\n1. Breathing Activity\n2. Reflection Activity\n3. Listing Activity\n4. Gratitude Activity\n5. Exit\nPlease enter your choice below:");
+            int choice = Convert.ToInt32(Console.ReadLine());
 
-    static void LoadingAnimation(int seconds)
-    {
-        List<string> animationStrings = new List<string>() { "|", "/", "-", "\\", "|", "/", "-", "\\", "|","/", "-", "\\", "|"};
-        for (int i = 0; i < seconds; i++)
-        {
-            Console.Write(animationStrings[i % animationStrings.Count]);
-            Thread.Sleep(500); // Pause for 1 second
-            Console.Write("\b \b");
+            if (choice == 5)
+                break;
+
+            Console.WriteLine("Enter the duration of the activity in seconds:");
+            int duration = Convert.ToInt32(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Console.WriteLine("Enter the countdown for breath in:");
+                    int breathInCountdown = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Enter the countdown for breath out:");
+                    int breathOutCountdown = Convert.ToInt32(Console.ReadLine());
+                    Activity activity = new BreathingActivity(duration, breathInCountdown, breathOutCountdown);
+                    activity.Start();
+                    break;
+                case 2:
+                    activity = new ReflectionActivity(duration);
+                    activity.Start();
+                    break;
+                case 3:
+                    activity = new ListingActivity(duration);
+                    activity.Start();
+                    break;
+                case 4:
+                    activity = new GratitudeActivity(duration);
+                    activity.Start();
+                    break;
+            }
         }
     }
 }
