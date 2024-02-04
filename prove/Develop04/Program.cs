@@ -154,21 +154,20 @@ class ListingActivity : Activity
         };
 
         Random random = new Random();
-        string prompt = prompts[random.Next(prompts.Length)];
-        Console.WriteLine(prompt);
 
         List<string> items = new List<string>();
         DateTime startTime = DateTime.Now;
         while ((DateTime.Now - startTime).TotalSeconds < duration)
         {
+            string prompt = prompts[random.Next(prompts.Length)];
+            Console.WriteLine(prompt);
             Console.WriteLine("Enter an item:");
             string item = Console.ReadLine();
-            items.Add(item);
+            //items.Add(item);
             Console.ReadLine();
+            Console.WriteLine("Press wait for next question...");
             Thread.Sleep(1000); // Pause for 1 seconds
-            LoadingAnimation(5); // Loading animation3
-            Console.WriteLine("Please keep writing more items...");
-            
+            LoadingAnimation(5); // Loading animation
         }
 
         Console.WriteLine($"You have listed {items.Count} items.");
