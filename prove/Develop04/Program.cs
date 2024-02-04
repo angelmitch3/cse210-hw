@@ -56,8 +56,10 @@ class BreathingActivity : Activity
 
     public override void Start()
     {
+        Console.Clear();
         Console.WriteLine("\nWelcome to the Breathing Activity.\n\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.\n");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
+        Console.WriteLine($"The activity will last for {duration} seconds.");
+        Console.WriteLine($"Get Ready...\n");
         Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
@@ -80,9 +82,11 @@ class ReflectionActivity : Activity
 
     public override void Start()
     {
+        Console.Clear();
         Console.WriteLine("\nWelcome to the Reflection Activity.\n\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.\n");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
-        Thread.Sleep(5000); // Pause for 5 seconds
+        Console.WriteLine($"The activity will last for {duration} seconds.\n");
+        Console.WriteLine($"Get Ready...\n");
+        Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
         string[] prompts = new string[]
@@ -133,9 +137,11 @@ class ListingActivity : Activity
 
     public override void Start()
     {
+        Console.Clear();
         Console.WriteLine("\nWelcome to the Listing Activity.\n\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.\n");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
-        Thread.Sleep(5000); // Pause for 5 seconds
+        Console.WriteLine($"The activity will last for {duration} seconds.");
+        Console.WriteLine($"Get Ready...\n");
+        Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
         string[] prompts = new string[]
@@ -159,9 +165,10 @@ class ListingActivity : Activity
             string item = Console.ReadLine();
             items.Add(item);
             Console.ReadLine();
-            Console.WriteLine("Please wait for next question...");
             Thread.Sleep(1000); // Pause for 1 seconds
-            LoadingAnimation(5); // Loading animation
+            LoadingAnimation(5); // Loading animation3
+            Console.WriteLine("Please keep writing more items...");
+            
         }
 
         Console.WriteLine($"You have listed {items.Count} items.");
@@ -176,10 +183,12 @@ class GratitudeActivity : Activity
     }
 
     public override void Start()
-    {
+    {   
+        Console.Clear();
         Console.WriteLine("\nWelcome to the Gratitude Activity.\n\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.\n");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
-        Thread.Sleep(5000); // Pause for 5 seconds
+        Console.WriteLine($"The activity will last for {duration} seconds.\n");
+        Console.WriteLine($"Get Ready...\n");
+        Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
         List<string> items = new List<string>();
