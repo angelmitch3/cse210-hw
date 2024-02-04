@@ -59,7 +59,7 @@ class BreathingActivity : Activity
         Console.Clear();
         Console.WriteLine("\nWelcome to the Breathing Activity.\n\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.\n");
         Console.WriteLine($"The activity will last for {duration} seconds.");
-        Console.WriteLine($"Get Ready...\n");
+        Console.WriteLine($"Get Ready...");
         Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
@@ -85,7 +85,7 @@ class ReflectionActivity : Activity
         Console.Clear();
         Console.WriteLine("\nWelcome to the Reflection Activity.\n\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.\n");
         Console.WriteLine($"The activity will last for {duration} seconds.\n");
-        Console.WriteLine($"Get Ready...\n");
+        Console.WriteLine($"Get Ready...");
         Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
@@ -140,7 +140,7 @@ class ListingActivity : Activity
         Console.Clear();
         Console.WriteLine("\nWelcome to the Listing Activity.\n\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.\n");
         Console.WriteLine($"The activity will last for {duration} seconds.");
-        Console.WriteLine($"Get Ready...\n");
+        Console.WriteLine($"Get Ready...");
         Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
