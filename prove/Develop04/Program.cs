@@ -16,7 +16,7 @@ abstract class Activity
     protected void End(string name)
     {
         Console.WriteLine($"Good job! You have completed the {name}. It lasted for {duration} seconds.");
-        Thread.Sleep(5000); // Pause for 5 seconds
+        Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(5); // Loading animation
     }
 
@@ -56,8 +56,8 @@ class BreathingActivity : Activity
 
     public override void Start()
     {
-        Console.WriteLine("\nWelcome to the Breathing Activity.\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.\n");
-        Console.WriteLine($"\nThe activity will last for {duration} seconds. Prepare to begin.\n");
+        Console.WriteLine("\nWelcome to the Breathing Activity.\n\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.\n");
+        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(1000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
 
@@ -80,7 +80,7 @@ class ReflectionActivity : Activity
 
     public override void Start()
     {
-        Console.WriteLine("\nWelcome to the Reflection Activity.\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.\n");
+        Console.WriteLine("\nWelcome to the Reflection Activity.\n\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.\n");
         Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
@@ -133,7 +133,7 @@ class ListingActivity : Activity
 
     public override void Start()
     {
-        Console.WriteLine("\nWelcome to the Listing Activity.\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.\n");
+        Console.WriteLine("\nWelcome to the Listing Activity.\n\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.\n");
         Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
@@ -177,7 +177,7 @@ class GratitudeActivity : Activity
 
     public override void Start()
     {
-        Console.WriteLine("\nWelcome to the Gratitude Activity.\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.\n");
+        Console.WriteLine("\nWelcome to the Gratitude Activity.\n\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.\n");
         Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(6); // Loading animation
