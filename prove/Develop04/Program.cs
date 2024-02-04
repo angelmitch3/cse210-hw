@@ -161,16 +161,17 @@ class ListingActivity : Activity
         {
             string prompt = prompts[random.Next(prompts.Length)];
             Console.WriteLine(prompt);
-            Console.WriteLine("Enter an item:");
+            Console.WriteLine("Enter your answer here:");
             string item = Console.ReadLine();
-            //items.Add(item);
-            Console.ReadLine();
-            Console.WriteLine("Press wait for next question...");
+            items.Add(item);
+            //Console.ReadLine();
+            //Console.WriteLine("Press enter for next question...");
+            Console.Write("Please wait for next question...");
             Thread.Sleep(1000); // Pause for 1 seconds
             LoadingAnimation(5); // Loading animation
         }
 
-        Console.WriteLine($"You have listed {items.Count} items.");
+        Console.WriteLine($"Time's up! You have answered {items.Count} questions.");
         End("Listing Activity");
     }
 }
@@ -186,8 +187,8 @@ class GratitudeActivity : Activity
         Console.Clear();
         Console.WriteLine("\nWelcome to the Gratitude Activity.\n\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.\n");
         Console.WriteLine($"The activity will last for {duration} seconds.\n");
-        Console.WriteLine($"Get Ready...\n");
-        Thread.Sleep(1000); // Pause for 5 seconds
+        Console.WriteLine($"Get Ready...");
+        Thread.Sleep(1000); // Pause for 1 second
         LoadingAnimation(6); // Loading animation
 
         List<string> items = new List<string>();
@@ -197,16 +198,21 @@ class GratitudeActivity : Activity
             Console.WriteLine("Enter an item:");
             string item = Console.ReadLine();
             items.Add(item);
-            Console.ReadLine();
-            Console.WriteLine("Please wait for next question...");
-            Thread.Sleep(1000); // Pause for 5 seconds
-            LoadingAnimation(6); // Loading animation
+            Console.WriteLine($"You have entered {items.Count} items so far.");
+            if ((DateTime.Now - startTime).TotalSeconds >= duration)
+            {
+                break;
+            }
+            //Console.WriteLine("Please wait for next question...");
+            Thread.Sleep(1000); // Pause for 1 second
+            //LoadingAnimation(6); // Loading animation
         }
 
-        Console.WriteLine($"You have listed {items.Count} items.");
+        Console.WriteLine($"Time's up! You have listed {items.Count} items.");
         End("Gratitude Activity");
     }
 }
+
 
 class Program
 {
