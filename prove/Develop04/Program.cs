@@ -22,19 +22,19 @@ class Program
                 case 1:
                     Console.WriteLine("Enter the countdown number for each breath:");
                     int countdownNumber = Convert.ToInt32(Console.ReadLine());
-                    StartActivity("Breathing Activity", "This activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.", duration);
+                    StartActivity("Breathing Activity", "\nThis activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.", duration);
                     BreathingActivity(duration, countdownNumber);
                     break;
                 case 2:
-                    StartActivity("Reflection Activity", "This activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.", duration);
+                    StartActivity("Reflection Activity", "\nThis activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.", duration);
                     ReflectionActivity(duration);
                     break;
                 case 3:
-                    StartActivity("Listing Activity", "This activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.", duration);
+                    StartActivity("Listing Activity", "\nThis activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.", duration);
                     ListingActivity(duration);
                     break;
                 case 4:
-                    StartActivity("Gratitude Activity", "This activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.", duration);
+                    StartActivity("Gratitude Activity", "\nThis activity will help you reflect on the things you are grateful for in your life. Try to list as many things as you can.", duration);
                     GratitudeActivity(duration);
                     break;
             }
@@ -43,8 +43,8 @@ class Program
 
     static void StartActivity(string name, string description, int duration)
     {
-        Console.WriteLine($"Welcome to the {name}. {description}\n");
-        Console.WriteLine($"\nThe activity will last for {duration} seconds. Prepare to begin.\n");
+        Console.WriteLine($"\nWelcome to the {name}.\n{description}\n");
+        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(5); // Loading animation
     }
