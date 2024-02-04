@@ -44,7 +44,7 @@ class Program
     static void StartActivity(string name, string description, int duration)
     {
         Console.WriteLine($"Welcome to the {name}. {description}\n");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
+        Console.WriteLine($"\nThe activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(5); // Loading animation
     }
@@ -165,7 +165,7 @@ class Program
     {
         for (int i = countdownNumber; i > 0; i--)
         {
-            Console.Write(i + " ");
+            Console.Write(i);
             Thread.Sleep(1000); // Pause for 1 second
             LoadingAnimation(1); // Loading animation
         }
