@@ -8,7 +8,7 @@ class Program
     {
         while (true)
         {
-            Console.WriteLine("Choose an activity:\n1. Breathing Activity\n2. Reflection Activity\n3. Listing Activity\n4. Gratitude Activity\n5. Exit");
+            Console.WriteLine("\nChoose an activity:\n1. Breathing Activity\n2. Reflection Activity\n3. Listing Activity\n4. Gratitude Activity\n5. Exit\nPlease enter your choice below:");
             int choice = Convert.ToInt32(Console.ReadLine());
 
             if (choice == 5)
@@ -43,18 +43,15 @@ class Program
 
     static void StartActivity(string name, string description, int duration)
     {
-        Console.WriteLine($"Starting the {name}. {description}");
-        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin...");
+        Console.WriteLine($"Welcome to the {name}. {description}\n");
+        Console.WriteLine($"The activity will last for {duration} seconds. Prepare to begin.\n");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(5); // Loading animation
     }
 
     static void EndActivity(string name, int duration)
     {
-        Console.WriteLine("Good job! You have completed the activity.");
-        Thread.Sleep(5000); // Pause for 5 seconds
-        LoadingAnimation(5); // Loading animation
-        Console.WriteLine($"You have completed the {name}. It lasted for {duration} seconds.");
+        Console.WriteLine($"Good job! You have completed the {name}. It lasted for {duration} seconds.");
         Thread.Sleep(5000); // Pause for 5 seconds
         LoadingAnimation(5); // Loading animation
     }
@@ -156,6 +153,8 @@ class Program
             items.Add(item);
             Thread.Sleep(5000); // Pause for 5 seconds
             LoadingAnimation(5); // Loading animation
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
         }
 
         Console.WriteLine($"You have listed {items.Count} items.");
@@ -175,10 +174,12 @@ class Program
 
     static void LoadingAnimation(int seconds)
     {
+        List<string> animationStrings = new List<string>() { "|", "/", "-", "\\", "|", "/", "-", "\\", "|","/", "-", "\\", "|"};
         for (int i = 0; i < seconds; i++)
         {
-            Console.Write(".");
-            Thread.Sleep(1000); // Pause for 1 second
+            Console.Write(animationStrings[i % animationStrings.Count]);
+            Thread.Sleep(500); // Pause for 1 second
+            Console.Write("\b \b");
         }
     }
 }
