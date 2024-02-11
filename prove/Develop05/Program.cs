@@ -81,12 +81,12 @@ class GoalConverter : JsonConverter<Goal>
             JsonElement root = doc.RootElement;
             if (root.TryGetProperty(nameof(SimpleGoal.IsComplete), out _))
                 return JsonSerializer.Deserialize<SimpleGoal>(root.GetRawText(), options);
-            if (root.TryGetProperty(nameof(ChecklistGoal.Times), out _))
+            else if (root.TryGetProperty(nameof(ChecklistGoal.Times), out _))
                 return JsonSerializer.Deserialize<ChecklistGoal>(root.GetRawText(), options);
-            if (root.TryGetProperty(nameof(EternalGoal), out _))
+            else if (root.TryGetProperty(nameof(EternalGoal), out _))
                 return JsonSerializer.Deserialize<EternalGoal>(root.GetRawText(), options);
-
-            throw new JsonException("Unknown type of Goal.");
+            else
+                throw new JsonException("Unknown type of Goal.");
         }
     }
 
