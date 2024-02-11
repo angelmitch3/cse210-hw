@@ -1,49 +1,53 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 abstract class Goal
 {
     public string Name { get; set; }
     public int Points { get; set; }
-    public DateTime LastUpdated { get; set; }
+    public string Description { get; set; }
 
-    public Goal(string name, int points)
+    [JsonConstructor]
+    protected Goal() { }
+
+    protected Goal(string name, int points, string description)
     {
         Name = name;
         Points = points;
-        LastUpdated = DateTime.Now;
+        Description = description;
     }
 
     public abstract void Record();
-
-    public bool IsAging()
-    {
-        return (DateTime.Now - LastUpdated).TotalDays > 7;
-    }
 }
 
 class SimpleGoal : Goal
 {
     public bool IsComplete { get; private set; }
 
-    public SimpleGoal(string name, int points) : base(name, points) { }
+    [JsonConstructor]
+    public SimpleGoal() { }
+
+    public SimpleGoal(string name, int points, string description) : base(name, points, description) { }
 
     public override void Record()
     {
         IsComplete = true;
-        LastUpdated = DateTime.Now;
     }
 }
 
 class EternalGoal : Goal
 {
-    public EternalGoal(string name, int points) : base(name, points) { }
+    [JsonConstructor]
+    public EternalGoal() { }
+
+    public EternalGoal(string name, int points, string description) : base(name, points, description) { }
 
     public override void Record()
     {
-        LastUpdated = DateTime.Now;
+        // Implementation for EternalGoal's Record method
     }
 }
 
@@ -53,7 +57,10 @@ class ChecklistGoal : Goal
     public int Target { get; set; }
     public int Bonus { get; set; }
 
-    public ChecklistGoal(string name, int points, int target, int bonus) : base(name, points)
+    [JsonConstructor]
+    public ChecklistGoal() { }
+
+    public ChecklistGoal(string name, int points, string description, int target, int bonus) : base(name, points, description)
     {
         Target = target;
         Bonus = bonus;
@@ -62,11 +69,6 @@ class ChecklistGoal : Goal
     public override void Record()
     {
         Times++;
-        if (Times == Target)
-        {
-            Points += Bonus;
-        }
-        LastUpdated = DateTime.Now;
     }
 }
 
@@ -125,35 +127,42 @@ class Program
 
     static void CreateGoal()
     {
-        Console.Write("Enter goal name: ");
+        Console.WriteLine("Type of Goals: ");
+        Console.WriteLine("1. Simple Goals");
+        Console.WriteLine("2. Eternal Goals");
+        Console.WriteLine("3. Checklist Goals");
+
+        Console.Write("What type of goal would you like to create? ");
+        var goalType = int.Parse(Console.ReadLine());
+
+        Console.Write("What is the name of your goal? ");
         var name = Console.ReadLine();
 
-        Console.Write("Enter goal points: ");
+        Console.Write("What is a short description of it? ");
+        var description = Console.ReadLine();
+
+        Console.Write("What is the amount of points associated with it? ");
         var points = int.Parse(Console.ReadLine());
 
-        Console.WriteLine("Choose goal type:\n1. Simple Goal\n2. Eternal Goal\n3. Checklist Goal");
-        Console.Write("Choose an option: ");
-        var option = Console.ReadLine();
-
-        switch (option)
+        switch (goalType)
         {
-            case "1":
-                goals.Add(new SimpleGoal(name, points));
+            case 1:
+                goals.Add(new SimpleGoal(name, points, description));
                 break;
-            case "2":
-                goals.Add(new EternalGoal(name, points));
+            case 2:
+                goals.Add(new EternalGoal(name, points, description));
                 break;
-            case "3":
-                Console.Write("Enter target times: ");
+            case 3:
+                Console.Write("How many times does this goal need to be accomplished for a bonus? ");
                 var target = int.Parse(Console.ReadLine());
 
-                Console.Write("Enter bonus points: ");
+                Console.Write("What is the bonus for accomplishing it many times? ");
                 var bonus = int.Parse(Console.ReadLine());
 
-                goals.Add(new ChecklistGoal(name, points, target, bonus));
+                goals.Add(new ChecklistGoal(name, points, description, target, bonus));
                 break;
             default:
-                Console.WriteLine("Invalid option. Please try again.");
+                Console.WriteLine("Invalid goal type. Please try again.");
                 break;
         }
     }
@@ -162,32 +171,35 @@ class Program
     {
         foreach (var goal in goals)
         {
-            Console.WriteLine($"{goal.Name} - {(goal is SimpleGoal ? ((SimpleGoal)goal).IsComplete ? "[X]" : "[ ]" : "")} {(goal is ChecklistGoal ? $"Completed {((ChecklistGoal)goal).Times}/{((ChecklistGoal)goal).Target} times" : "")}");
+            Console.WriteLine($"{goal.Name} - {goal.Description} - Points: {goal.Points}");
         }
     }
 
     static void SaveGoals()
     {
-        using (Stream stream = File.Open("goals.dat", FileMode.Create))
-        {
-            BinaryFormatter bin = new BinaryFormatter();
-            bin.Serialize(stream, goals);
-        }
+        Console.Write("Enter the name of the file to save: ");
+        string fileName = Console.ReadLine();
+
+        string json = JsonSerializer.Serialize(goals);
+        File.WriteAllText(fileName, json);
+
+        Console.WriteLine($"Goals saved to {fileName}.");
     }
 
     static void LoadGoals()
     {
-        if (File.Exists("goals.dat"))
+        Console.Write("Enter the name of the file to load: ");
+        string fileName = Console.ReadLine();
+
+        if (File.Exists(fileName))
         {
-            using (Stream stream = File.Open("goals.dat", FileMode.Open))
-            {
-                BinaryFormatter bin = new BinaryFormatter();
-                goals = (List<Goal>)bin.Deserialize(stream);
-            }
+            string json = File.ReadAllText(fileName);
+            goals = JsonSerializer.Deserialize<List<Goal>>(json);
+            Console.WriteLine("Goals loaded successfully.");
         }
         else
         {
-            Console.WriteLine("No saved goals found.");
+            Console.WriteLine("File not found.");
         }
     }
 
@@ -213,10 +225,7 @@ class Program
         score = 0;
         foreach (var goal in goals)
         {
-            if (goal is SimpleGoal && ((SimpleGoal)goal).IsComplete || goal is ChecklistGoal && ((ChecklistGoal)goal).Times > 0 || goal is EternalGoal)
-            {
-                score += goal.Points;
-            }
+            score += goal.Points;
         }
     }
 }
