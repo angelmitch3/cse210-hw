@@ -72,6 +72,30 @@ class ChecklistGoal : Goal
     }
 }
 
+class GoalConverter : JsonConverter<Goal>
+{
+    public override Goal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
+        {
+            JsonElement root = doc.RootElement;
+            if (root.TryGetProperty(nameof(SimpleGoal.IsComplete), out _))
+                return JsonSerializer.Deserialize<SimpleGoal>(root.GetRawText(), options);
+            if (root.TryGetProperty(nameof(ChecklistGoal.Times), out _))
+                return JsonSerializer.Deserialize<ChecklistGoal>(root.GetRawText(), options);
+            if (root.TryGetProperty(nameof(EternalGoal), out _))
+                return JsonSerializer.Deserialize<EternalGoal>(root.GetRawText(), options);
+
+            throw new JsonException("Unknown type of Goal.");
+        }
+    }
+
+    public override void Write(Utf8JsonWriter writer, Goal value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 class Program
 {
     static List<Goal> goals = new List<Goal>();
@@ -194,7 +218,9 @@ class Program
         if (File.Exists(fileName))
         {
             string json = File.ReadAllText(fileName);
-            goals = JsonSerializer.Deserialize<List<Goal>>(json);
+            JsonSerializerOptions options = new JsonSerializerOptions();
+            options.Converters.Add(new GoalConverter());
+            goals = JsonSerializer.Deserialize<List<Goal>>(json, options);
             Console.WriteLine("Goals loaded successfully.");
         }
         else
