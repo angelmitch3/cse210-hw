@@ -152,8 +152,8 @@ class Program
 
     static void CreateGoal()
     {
-        Console.Clear();
-        Console.WriteLine("Type of Goals: ");
+        //Console.Clear();
+        Console.WriteLine("\nType of Goals: ");
         Console.WriteLine("1. Simple Goals");
         Console.WriteLine("2. Eternal Goals");
         Console.WriteLine("3. Checklist Goals");
@@ -170,6 +170,13 @@ class Program
         Console.Write("What is the amount of points associated with it? ");
         var points = int.Parse(Console.ReadLine());
 
+        Console.Write("How many times does this goal need to be accomplished for a bonus? ");
+        var target = int.Parse(Console.ReadLine());
+
+        Console.Write("What is the bonus for accomplishing it many times? ");
+        var bonus = int.Parse(Console.ReadLine());
+
+
         switch (goalType)
         {
             case 1:
@@ -179,12 +186,6 @@ class Program
                 goals.Add(new EternalGoal(name, points, description));
                 break;
             case 3:
-                Console.Write("How many times does this goal need to be accomplished for a bonus? ");
-                var target = int.Parse(Console.ReadLine());
-
-                Console.Write("What is the bonus for accomplishing it many times? ");
-                var bonus = int.Parse(Console.ReadLine());
-
                 goals.Add(new ChecklistGoal(name, points, description, target, bonus));
                 break;
             default:
