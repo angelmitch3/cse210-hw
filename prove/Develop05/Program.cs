@@ -105,6 +105,7 @@ class Program
     {
         while (true)
         {
+            Console.Clear();
             Console.WriteLine("1. Create New Goals\n2. List Goals\n3. Save Goals\n4. Load Goals\n5. Record Events\n6. Quit");
             Console.Write("Choose an option: ");
             var option = Console.ReadLine();
@@ -151,12 +152,13 @@ class Program
 
     static void CreateGoal()
     {
-        Console.WriteLine("Type of Goals: ");
+        Console.Clear();
+        Console.WriteLine("Select Type of Goals: ");
         Console.WriteLine("1. Simple Goals");
         Console.WriteLine("2. Eternal Goals");
         Console.WriteLine("3. Checklist Goals");
 
-        Console.Write("What type of goal would you like to create? ");
+        Console.Write("What type of goal would you like to create? Select number from the above options");
         var goalType = int.Parse(Console.ReadLine());
 
         Console.Write("What is the name of your goal? ");
@@ -191,13 +193,15 @@ class Program
         }
     }
 
-    static void ListGoals()
+   static void ListGoals()
+{
+    Console.WriteLine($"Current Points: {score}");
+
+    foreach (var goal in goals)
     {
-        foreach (var goal in goals)
-        {
-            Console.WriteLine($"{goal.Name} - {goal.Description} - Points: {goal.Points}");
-        }
+        Console.WriteLine($"{goal.Name} - {goal.Description} - Points: {goal.Points}");
     }
+}
 
     static void SaveGoals()
     {
