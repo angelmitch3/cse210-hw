@@ -105,7 +105,7 @@ class Program
     {
         while (true)
         {
-            Console.Clear();
+            
             Console.WriteLine("1. Create New Goals\n2. List Goals\n3. Save Goals\n4. Load Goals\n5. Record Events\n6. Quit");
             Console.Write("Choose an option: ");
             var option = Console.ReadLine();
