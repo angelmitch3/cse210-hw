@@ -125,6 +125,48 @@ public class ShoeCollection
     }
 
     public int ShoeCount => shoes.Count;
+
+    public Shoe GetShoe(string model)
+    {
+        return shoes.FirstOrDefault(shoe => shoe.Model.Equals(model, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public void UpdateShoe(string model, string fieldToUpdate, string newValue)
+    {
+        var shoeToUpdate = GetShoe(model);
+        if (shoeToUpdate != null)
+        {
+            switch (fieldToUpdate.ToLower())
+            {
+                case "model":
+                    shoeToUpdate.Model = newValue;
+                    break;
+                case "brand":
+                    shoeToUpdate.Brand = newValue;
+                    break;
+                case "amount":
+                    shoeToUpdate.Amount = Convert.ToDouble(newValue);
+                    break;
+                case "category":
+                    shoeToUpdate.Category = (ShoeCategory)Enum.Parse(typeof(ShoeCategory), newValue, true);
+                    break;
+                case "description":
+                    shoeToUpdate.Description = newValue;
+                    break;
+                case "status":
+                    shoeToUpdate.Status = (ShoeStatus)Enum.Parse(typeof(ShoeStatus), newValue, true);
+                    break;
+                default:
+                    Console.WriteLine("Invalid field to update.");
+                    break;
+            }
+            Console.WriteLine("Shoe record updated successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Shoe not found.");
+        }
+    }
 }
 
 class Program
@@ -154,15 +196,16 @@ class Program
             Console.WriteLine("6. Calculate difference between total appreciated value and depreciated value");
             Console.WriteLine("7. Save shoe collection to file");
             Console.WriteLine("8. Open a shoe collection file");
-            Console.WriteLine("9. Exit");
-            
+            Console.WriteLine("9. Update shoe record");
+            Console.WriteLine("10. Exit");
+
             Console.Write("Please enter option here: ");
 
             int option = Convert.ToInt32(Console.ReadLine());
 
             switch (option)
             {
-               case 1:
+                case 1:
                     Console.WriteLine("\nSelect brand:");
                     Console.WriteLine("1. Jordan");
                     Console.WriteLine("2. Nike");
@@ -214,7 +257,7 @@ class Program
                     newShoe.Brand = brand;
                     newShoe.Status = ShoeStatus.Bought;
                     myShoes.AddShoe(newShoe);
-                    Console.Write("\nShoe record has been created.");
+                    Console.WriteLine("\nShoe record has been created.");
                     break;
                 case 2:
                     myShoes.ListShoes("", "");
@@ -255,8 +298,6 @@ class Program
                             break;
                     }
                     break;
-
-
                 case 4:
                     Console.WriteLine("\nTotal spent on shoes: $" + myShoes.CalculateTotalSpent());
                     break;
@@ -269,16 +310,30 @@ class Program
                 case 7:
                     Console.WriteLine("\nEnter file name to save:");
                     string saveFileName = Console.ReadLine();
-                    myShoes.SaveToFile(saveFileName);
-                    Console.WriteLine("\nShoe collection saved to file.");
+                    try
+                    {
+                        myShoes.SaveToFile(saveFileName);
+                        Console.WriteLine("\nShoe collection saved to file.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"\nError saving shoe collection: {ex.Message}");
+                    }
                     break;
                 case 8:
                     Console.WriteLine("\nEnter file name to open:");
                     string openFileName = Console.ReadLine();
                     if (File.Exists(openFileName))
                     {
-                        myShoes = ShoeCollection.LoadFromFile(openFileName);
-                        Console.WriteLine("\nShoe collection opened from file.");
+                        try
+                        {
+                            myShoes = ShoeCollection.LoadFromFile(openFileName);
+                            Console.WriteLine("\nShoe collection opened from file.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"\nError loading shoe collection from file: {ex.Message}");
+                        }
                     }
                     else
                     {
@@ -286,6 +341,15 @@ class Program
                     }
                     break;
                 case 9:
+                    Console.WriteLine("\nEnter the model of the shoe you want to update:");
+                    string model = Console.ReadLine();
+                    Console.WriteLine("\nEnter the field you want to update (Model, Brand, Amount, Category, Description, Status):");
+                    string fieldToUpdate = Console.ReadLine();
+                    Console.WriteLine("\nEnter the new value:");
+                    string newValue = Console.ReadLine();
+                    myShoes.UpdateShoe(model, fieldToUpdate, newValue);
+                    break;
+                case 10:
                     Environment.Exit(0);
                     break;
                 default:
