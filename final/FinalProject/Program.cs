@@ -110,34 +110,18 @@ public class ShoeCollection
 
     public void SaveToFile(string fileName)
     {
-        try
+        var options = new JsonSerializerOptions
         {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            var jsonString = JsonSerializer.Serialize(this, options);
-            File.WriteAllText(fileName, jsonString);
-            Console.WriteLine("\nShoe collection saved to file.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"\nError saving shoe collection: {ex.Message}");
-        }
+            WriteIndented = true
+        };
+        var jsonString = JsonSerializer.Serialize(this, options);
+        File.WriteAllText(fileName, jsonString);
     }
 
     public static ShoeCollection LoadFromFile(string fileName)
     {
-        try
-        {
-            var jsonString = File.ReadAllText(fileName);
-            return JsonSerializer.Deserialize<ShoeCollection>(jsonString);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"\nError loading shoe collection from file: {ex.Message}");
-            return new ShoeCollection();
-        }
+        var jsonString = File.ReadAllText(fileName);
+        return JsonSerializer.Deserialize<ShoeCollection>(jsonString);
     }
 
     public int ShoeCount => shoes.Count;
@@ -178,17 +162,101 @@ class Program
 
             switch (option)
             {
-                case 1:
-                    // Add new shoe entry
-                    // Code for adding a new shoe entry
+               case 1:
+                    Console.WriteLine("\nSelect brand:");
+                    Console.WriteLine("1. Jordan");
+                    Console.WriteLine("2. Nike");
+                    Console.WriteLine("3. Adidas");
+                    Console.WriteLine("4. Puma");
+                    Console.WriteLine("5. Other brand");
+                    Console.Write("Please enter option here: ");
+                    int brandOption = Convert.ToInt32(Console.ReadLine());
+                    string brand;
+                    switch (brandOption)
+                    {
+                        case 1:
+                            brand = "Jordan";
+                            break;
+                        case 2:
+                            brand = "Nike";
+                            break;
+                        case 3:
+                            brand = "Adidas";
+                            break;
+                        case 4:
+                            brand = "Puma";
+                            break;
+                        case 5:
+                            brand = "Other brand";
+                            break;
+                        default:
+                            Console.WriteLine("Invalid brand option.");
+                            continue;
+                    }
+
+                    Shoe newShoe = null;
+                    if (brand.ToLower() == "jordan")
+                    {
+                        newShoe = new JordanShoe();
+                    }
+                    else
+                    {
+                        newShoe = new OtherBrandShoe();
+                    }
+                    Console.WriteLine("Enter model:");
+                    newShoe.Model = Console.ReadLine();
+                    Console.WriteLine("Enter amount in USD:");
+                    newShoe.Amount = Convert.ToDouble(Console.ReadLine());
+                    Console.WriteLine("Enter category (0 for Casual, 1 for Sports, 2 for Formal, 3 for Others):");
+                    newShoe.Category = (ShoeCategory)Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Enter description:");
+                    newShoe.Description = Console.ReadLine();
+                    newShoe.Brand = brand;
+                    newShoe.Status = ShoeStatus.Bought;
+                    myShoes.AddShoe(newShoe);
+                    Console.Write("\nShoe record has been created.");
                     break;
                 case 2:
                     myShoes.ListShoes("", "");
                     break;
                 case 3:
-                    // Filter shoes
-                    // Code for filtering shoes
+                    if (myShoes == null)
+                    {
+                        Console.WriteLine("Error: Shoe collection is not initialized.");
+                        break;
+                    }
+
+                    Console.WriteLine("\nSelect filter option:");
+                    Console.WriteLine("1. Brand");
+                    Console.WriteLine("2. Category");
+                    Console.WriteLine("3. Status");
+                    Console.Write("Please enter option here: ");
+                    int filterOption = Convert.ToInt32(Console.ReadLine());
+                    string filterValue = "";
+                    switch (filterOption)
+                    {
+                        case 1:
+                            Console.WriteLine("\nEnter brand:");
+                            filterValue = Console.ReadLine();
+                            myShoes.ListShoes("brand", filterValue);
+                            break;
+                        case 2:
+                            Console.WriteLine("\nEnter category (Casual, Sports, Formal, Others):");
+                            filterValue = Console.ReadLine();
+                            myShoes.ListShoes("category", filterValue);
+                            break;
+                        case 3:
+                            Console.WriteLine("\nEnter status (Bought, Sold):");
+                            filterValue = Console.ReadLine();
+                            myShoes.ListShoes("status", filterValue);
+                            break;
+                        default:
+                            Console.WriteLine("Invalid option.");
+                            break;
+                    }
                     break;
+
+
                 case 4:
                     Console.WriteLine("\nTotal spent on shoes: $" + myShoes.CalculateTotalSpent());
                     break;
@@ -202,11 +270,20 @@ class Program
                     Console.WriteLine("\nEnter file name to save:");
                     string saveFileName = Console.ReadLine();
                     myShoes.SaveToFile(saveFileName);
+                    Console.WriteLine("\nShoe collection saved to file.");
                     break;
                 case 8:
                     Console.WriteLine("\nEnter file name to open:");
                     string openFileName = Console.ReadLine();
-                    myShoes = ShoeCollection.LoadFromFile(openFileName);
+                    if (File.Exists(openFileName))
+                    {
+                        myShoes = ShoeCollection.LoadFromFile(openFileName);
+                        Console.WriteLine("\nShoe collection opened from file.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nThe file does not exist.");
+                    }
                     break;
                 case 9:
                     Environment.Exit(0);
@@ -215,6 +292,21 @@ class Program
                     Console.WriteLine("Invalid option. Please try again.");
                     break;
             }
+        }
+    }
+
+    static string GetFilterOption(int option)
+    {
+        switch (option)
+        {
+            case 1:
+                return "brand";
+            case 2:
+                return "category";
+            case 3:
+                return "status";
+            default:
+                return "";
         }
     }
 }
