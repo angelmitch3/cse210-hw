@@ -255,7 +255,7 @@ class Program
                     {
                         newShoe = new OtherBrandShoe();
                     }
-                    Console.WriteLine("Enter model:");
+                    Console.WriteLine("\nEnter model:");
                     newShoe.Model = Console.ReadLine();
                     Console.WriteLine("Enter amount in USD:");
                     newShoe.Amount = Convert.ToDouble(Console.ReadLine());
