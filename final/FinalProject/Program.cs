@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-//defining different categories of shoes
+// Defining different categories of shoes
 public enum ShoeCategory
 {
     Casual,
@@ -13,14 +13,14 @@ public enum ShoeCategory
     Others
 }
 
-//defining the status of a shoe (whether it's bought or sold)
+// Defining the status of a shoe (whether it's bought or sold)
 public enum ShoeStatus
 {
-    Bought,
+    InStock, // Modified from Bought
     Sold
 }
 
-//// Abstract class representing a shoe with common properties and methods
+// Abstract class representing a shoe with common properties and methods
 public abstract class Shoe
 {
     public string Model { get; set; }
@@ -33,7 +33,7 @@ public abstract class Shoe
     public abstract double EstimateResaleValue();
 }
 
-//class representing a shoe from the Jordan brand
+// Class representing a shoe from the Jordan brand
 public class JordanShoe : Shoe
 {
     public override double EstimateResaleValue()
@@ -42,7 +42,8 @@ public class JordanShoe : Shoe
         return Amount * 1.2;
     }
 }
-// Abstract method to estimate the resale value of the shoe
+
+// Class representing a shoe from other brands
 public class OtherBrandShoe : Shoe
 {
     public override double EstimateResaleValue()
@@ -52,22 +53,22 @@ public class OtherBrandShoe : Shoe
     }
 }
 
-//Class representing a collection of shoes with various operations
+// Class representing a collection of shoes with various operations
 public class ShoeCollection
 {
     private List<Shoe> shoes;
 
-    public ShoeCollection()  //initialize a new shoe collection
+    public ShoeCollection()  // Initialize a new shoe collection
     {
         shoes = new List<Shoe>();
     }
 
-    public void AddShoe(Shoe shoe) //add a new shoe to the collection
+    public void AddShoe(Shoe shoe) // Add a new shoe to the collection
     {
         shoes.Add(shoe);
     }
 
-    public List<Shoe> GetFilteredShoes(string filterOption, string filterValue)  //filter shoes based on a given criteria
+    public List<Shoe> GetFilteredShoes(string filterOption, string filterValue)  // Filter shoes based on a given criteria
     {
         switch (filterOption.ToLower())
         {
@@ -82,7 +83,7 @@ public class ShoeCollection
         }
     }
 
-    public void ListShoes(string filterOption, string filterValue) //// List to store the shoes in the collection
+    public void ListShoes(string filterOption, string filterValue) // List to store the shoes in the collection
     {
         var filteredShoes = GetFilteredShoes(filterOption, filterValue);
         Console.WriteLine("\nList of Shoes:");
@@ -99,22 +100,23 @@ public class ShoeCollection
         }
     }
 
-    public double CalculateTotalSpent() //calculate the total amount spent on all shoes in the collection
+    public double CalculateTotalSpent() // Calculate the total amount spent on all shoes in the collection
     {
         return shoes.Sum(shoe => shoe.Amount);
     }
 
-    public double CalculateTotalResaleValue() //calculate the total resale value of all shoes in the collection
+    public double CalculateTotalResaleValue() // Calculate the total resale value of all shoes in the collection
     {
         return shoes.Sum(shoe => shoe.EstimateResaleValue());
     }
 
-    public double CalculateValueDifference() //calculate the difference between the total appreciated and depreciated value of all shoes
+    public double CalculateValueDifference() // Calculate the difference between the total appreciated and depreciated value of all shoes
     {
         return CalculateTotalResaleValue() - CalculateTotalSpent();
     }
 
-    public void SaveToFile(string fileName) //save the shoe collection to a JSON file
+    // Save the shoe collection to a JSON file
+    public void SaveToFile(string fileName)
     {
         var options = new JsonSerializerOptions
         {
@@ -124,20 +126,22 @@ public class ShoeCollection
         File.WriteAllText(fileName, jsonString);
     }
 
-    public static ShoeCollection LoadFromFile(string fileName) //load a shoe collection from a JSON file
+    // Load a shoe collection from a JSON file
+    public static ShoeCollection LoadFromFile(string fileName)
     {
         var jsonString = File.ReadAllText(fileName);
         return JsonSerializer.Deserialize<ShoeCollection>(jsonString);
     }
 
-    public int ShoeCount => shoes.Count; //total count of shoes in the collection
+    public int ShoeCount => shoes.Count; // Total count of shoes in the collection
 
-    public Shoe GetShoe(string model) //get a shoe from the collection by its model
+    public Shoe GetShoe(string model) // Get a shoe from the collection by its model
     {
         return shoes.FirstOrDefault(shoe => shoe.Model.Equals(model, StringComparison.OrdinalIgnoreCase));
     }
 
-    public void UpdateShoe(string model, string fieldToUpdate, string newValue) //to update a shoe's information in the collection
+    // Update a shoe's information in the collection
+    public void UpdateShoe(string model, string fieldToUpdate, string newValue)
     {
         var shoeToUpdate = GetShoe(model);
         if (shoeToUpdate != null)
@@ -204,10 +208,7 @@ class Program
             Console.WriteLine("4. Calculate total spent on shoes");
             Console.WriteLine("5. Calculate total resale value of shoes");
             Console.WriteLine("6. Calculate difference between total appreciated value and depreciated value");
-            Console.WriteLine("7. Save shoe collection to file");
-            Console.WriteLine("8. Open a shoe collection file");
-            Console.WriteLine("9. Update shoe record");
-            Console.WriteLine("10. Exit");
+            Console.WriteLine("7. Exit");
 
             Console.Write("Please enter option here: ");
 
@@ -265,7 +266,7 @@ class Program
                     Console.WriteLine("Enter description:");
                     newShoe.Description = Console.ReadLine();
                     newShoe.Brand = brand;
-                    newShoe.Status = ShoeStatus.Bought;
+                    newShoe.Status = ShoeStatus.InStock; // Modified from Bought
                     myShoes.AddShoe(newShoe);
                     Console.WriteLine("\nShoe record has been created.");
                     break;
@@ -299,7 +300,7 @@ class Program
                             myShoes.ListShoes("category", filterValue);
                             break;
                         case 3:
-                            Console.WriteLine("\nEnter status (Bought, Sold):");
+                            Console.WriteLine("\nEnter status (InStock, Sold):");
                             filterValue = Console.ReadLine();
                             myShoes.ListShoes("status", filterValue);
                             break;
@@ -318,69 +319,12 @@ class Program
                     Console.WriteLine("\nDifference between total appreciated value and depreciated value: $" + myShoes.CalculateValueDifference());
                     break;
                 case 7:
-                    Console.WriteLine("\nEnter file name to save:");
-                    string saveFileName = Console.ReadLine();
-                    try
-                    {
-                        myShoes.SaveToFile(Path.Combine(directoryPath, saveFileName));
-                        Console.WriteLine("\nShoe collection saved to file.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"\nError saving shoe collection: {ex.Message}");
-                    }
-                    break;
-                case 8:
-                    Console.WriteLine("\nEnter file name to open:");
-                    string openFileName = Console.ReadLine();
-                    if (File.Exists(openFileName))
-                    {
-                        try
-                        {
-                            myShoes = ShoeCollection.LoadFromFile(openFileName);
-                            Console.WriteLine("\nShoe collection opened from file.");
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"\nError loading shoe collection from file: {ex.Message}");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nThe file does not exist.");
-                    }
-                    break;
-                case 9:
-                    Console.WriteLine("\nEnter the model of the shoe you want to update:");
-                    string model = Console.ReadLine();
-                    Console.WriteLine("\nEnter the field you want to update (Model, Brand, Amount, Category, Description, Status):");
-                    string fieldToUpdate = Console.ReadLine();
-                    Console.WriteLine("\nEnter the new value:");
-                    string newValue = Console.ReadLine();
-                    myShoes.UpdateShoe(model, fieldToUpdate, newValue);
-                    break;
-                case 10:
                     Environment.Exit(0);
                     break;
                 default:
                     Console.WriteLine("Invalid option. Please try again.");
                     break;
             }
-        }
-    }
-
-    static string GetFilterOption(int option) //Filter the option
-    {
-        switch (option)
-        {
-            case 1:
-                return "brand";
-            case 2:
-                return "category";
-            case 3:
-                return "status";
-            default:
-                return "";
         }
     }
 }
