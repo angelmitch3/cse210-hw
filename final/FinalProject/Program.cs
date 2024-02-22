@@ -208,7 +208,8 @@ class Program
             Console.WriteLine("4. Calculate total spent on shoes");
             Console.WriteLine("5. Calculate total resale value of shoes");
             Console.WriteLine("6. Calculate difference between total appreciated value and depreciated value");
-            Console.WriteLine("7. Exit");
+            Console.WriteLine("7. Update shoe record");
+            Console.WriteLine("8. Exit");
 
             Console.Write("Please enter option here: ");
 
@@ -319,6 +320,15 @@ class Program
                     Console.WriteLine("\nDifference between total appreciated value and depreciated value: $" + myShoes.CalculateValueDifference());
                     break;
                 case 7:
+                    Console.WriteLine("\nEnter the model of the shoe you want to update:");
+                    string model = Console.ReadLine();
+                    Console.WriteLine("\nEnter the field you want to update (Model, Brand, Amount, Category, Description, Status):");
+                    string fieldToUpdate = Console.ReadLine();
+                    Console.WriteLine("\nEnter the new value:");
+                    string newValue = Console.ReadLine();
+                    myShoes.UpdateShoe(model, fieldToUpdate, newValue);
+                    break;
+                case 8:
                     Environment.Exit(0);
                     break;
                 default:
