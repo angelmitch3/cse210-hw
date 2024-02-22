@@ -220,7 +220,7 @@ class Program
                     Console.WriteLine("3. Adidas");
                     Console.WriteLine("4. Puma");
                     Console.WriteLine("5. Other brand");
-                    Console.Write("Please enter option here: ");
+                    Console.Write("Please enter number option here: ");
                     int brandOption = Convert.ToInt32(Console.ReadLine());
                     string brand;
                     switch (brandOption)
