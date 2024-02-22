@@ -194,7 +194,8 @@ class Program
 
         while (true)
         {
-            Console.WriteLine($"\n\nCurrent number of shoe entries: {myShoes.ShoeCount}");
+             Console.WriteLine("\n\nWELCOME TO MY SHOE COLLECTION MANAGEMENT SYSTEM");
+            Console.WriteLine($"\nCurrent number of shoe entries: {myShoes.ShoeCount}");
             Console.WriteLine("\nPlease select an option:");
             Console.WriteLine("1. Add new Shoes entry");
             Console.WriteLine("2. List all shoes");
