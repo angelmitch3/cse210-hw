@@ -85,6 +85,7 @@ public class ShoeCollection
     public void ListShoes(string filterOption, string filterValue) //// List to store the shoes in the collection
     {
         var filteredShoes = GetFilteredShoes(filterOption, filterValue);
+        Console.WriteLine("\nList of Shoes:");
         if (filteredShoes.Any())
         {
             foreach (var shoe in filteredShoes)
